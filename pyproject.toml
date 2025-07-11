@@ -1,0 +1,17 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "example-fastapi-setup"
+version = "0.1.0"
+authors = [
+    { name = "Dean Garlick" },
+]
+description = "Example FastAPI setup"
+requires-python = ">=3.11"
+
+[tool.pytest.ini_options]
+pythonpath = [
+    "."
+]
