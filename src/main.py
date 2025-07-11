@@ -15,7 +15,6 @@ from src.operations import (
 from src.db_models import Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
-
 DATABASE_URL = "sqlite:///example.db"
 
 engine = create_engine(DATABASE_URL)

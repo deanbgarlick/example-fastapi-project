@@ -1,17 +1,16 @@
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
-
 [project]
 name = "example-fastapi-setup"
 version = "0.1.0"
-authors = [
-    { name = "Dean Garlick" },
-]
-description = "Example FastAPI setup"
+description = "Add your description here"
+readme = "README.md"
 requires-python = ">=3.11"
+dependencies = [
+    "fastapi[standard]>=0.116.1",
+    "sqlalchemy>=2.0.39",
+    "uvicorn>=0.35.0",
+]
 
-[tool.pytest.ini_options]
-pythonpath = [
-    "."
+[dependency-groups]
+dev = [
+    "pytest>=8.4.1",
 ]
