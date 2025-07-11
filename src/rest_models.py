@@ -22,16 +22,3 @@ class ItemCreate(BaseModel):
 class ItemUpdate(BaseModel):
     name: Optional[str]
     description: Optional[str]
-
-
-class Base(DeclarativeBase):
-    pass
-
-
-class DBItem(Base):
-    __tablename__ = "items"
-
-    id: Mapped[int] = mapped_column(primary_key=True, index=True)
-    name: Mapped[str] = mapped_column(String(30))
-    description: Mapped[Optional[str]]
-
