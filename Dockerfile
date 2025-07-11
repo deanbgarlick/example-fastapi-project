@@ -32,7 +32,7 @@ COPY tests ./tests/
 RUN . ~/.bashrc && uv pip install --system ".[dev]"
 
 # Run tests
-RUN . ~/.bashrc && pytest tests/
+RUN . ~/.bashrc && PYTHONPATH=/app uv run pytest tests/
 
 ########################################################
 # Production stage
@@ -56,9 +56,9 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
     echo 'export PATH="/root/.cargo/bin:$PATH"' >> ~/.bashrc && \
     . ~/.bashrc
 
-# Copy only necessary files
-COPY pyproject.toml README.md ./
-COPY src ./src/
+# Copy files from builder stage (this ensures builder stage runs first)
+COPY --from=builder /app/pyproject.toml /app/README.md ./
+COPY --from=builder /app/src ./src/
 
 # Install only production dependencies
 RUN . ~/.bashrc && uv pip install --system .
