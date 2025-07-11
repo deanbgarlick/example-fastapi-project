@@ -53,6 +53,14 @@ def teardown_tables():
     Base.metadata.drop_all(bind=engine)
 
 
+def test_healthcheck():
+    response = client.get("/")
+    assert response.status_code == 200, response.text
+    data = response.json()
+    assert data["status"] == "healthy"
+    assert data["message"] == "API is running"
+
+
 def test_create_item():
     response = client.post(
         "/items/", json={"name": "Test Item", "description": "This is a test item"}

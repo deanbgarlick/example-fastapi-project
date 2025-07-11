@@ -11,5 +11,9 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(lifespan=lifespan)
 
+@app.get("/")
+async def healthcheck():
+    return {"status": "healthy", "message": "API is running"}
+
 # Include the items router
 app.include_router(items.router)
