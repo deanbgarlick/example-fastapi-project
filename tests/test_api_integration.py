@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 import pytest
 from src.app import app
 from src.db import get_db
-from src.db_models import Base, DBItem
+from src.models.db_models import Base, DBItem
 
 # Setup the TestClient
 client = TestClient(app)

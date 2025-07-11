@@ -1,11 +1,11 @@
 from sqlalchemy.orm import Session
-from src.rest_models import (
+from src.models.rest_models import (
     Item,
     ItemCreate,
     ItemUpdate,
     NotFoundError,
 )
-from src.db_models import (
+from src.models.db_models import (
     DBItem,
 )
 from src.logging import with_default_logging

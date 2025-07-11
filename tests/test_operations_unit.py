@@ -4,9 +4,9 @@ from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, StaticPool
 from sqlalchemy.orm import sessionmaker
 
-from src.db_models import Base
-from src.db_models import DBItem
-from src.rest_models import ItemCreate, ItemUpdate
+from src.models.db_models import Base
+from src.models.db_models import DBItem
+from src.models.rest_models import ItemCreate, ItemUpdate
 from src.operations import db_create_item, db_delete_item, db_read_item, db_update_item
 
 # Setup the in-memory SQLite database for testing

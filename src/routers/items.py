@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from src.rest_models import (
+from src.models.rest_models import (
     Item,
     ItemCreate, 
     ItemUpdate,

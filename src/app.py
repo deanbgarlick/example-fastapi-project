@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
-from src.db_models import Base
+from src.models.db_models import Base
 from src.db import engine
 from src.routers import items
 from src.logging import configure_logging, with_default_logging
