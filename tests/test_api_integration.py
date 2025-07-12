@@ -3,13 +3,13 @@ from sqlalchemy import create_engine, StaticPool
 from sqlalchemy.orm import sessionmaker
 import pytest
 from src.app import app
-from src.db import get_db
+from src.db import get_db, get_db_builder, DBType
 from src.models.db_models import Base, DBItem
 
 # Setup the TestClient
 client = TestClient(app)
 
-# Setup the in-memory SQLite database for testing
+# Uncomment to setup the in-memory SQLite database for testing
 DATABASE_URL = "sqlite:///:memory:"
 engine = create_engine(
     DATABASE_URL,
@@ -18,8 +18,12 @@ engine = create_engine(
     },
     poolclass=StaticPool,
 )
-TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
+# Uncomment to setup the NEON Postgres database for testing
+# get_db_func, engine = get_db_builder(DBType.NEON)
+
+
+TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # Dependency to override the get_db dependency in the main app
 def override_get_db():
@@ -28,7 +32,6 @@ def override_get_db():
         yield database
     finally:
         database.close()
-
 
 app.dependency_overrides[get_db] = override_get_db
 

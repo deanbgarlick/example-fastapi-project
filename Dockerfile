@@ -27,6 +27,7 @@ RUN curl -LsSf https://astral.sh/uv/install.sh | sh && \
 COPY pyproject.toml README.md ./
 COPY src ./src/
 COPY tests ./tests/
+COPY secrets ./secrets/
 
 # Install all dependencies including dev dependencies
 RUN . ~/.bashrc && uv pip install --system ".[dev]"

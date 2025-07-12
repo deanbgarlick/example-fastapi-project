@@ -14,11 +14,34 @@ def get_db_url(db_type: DBType) -> str:
     if db_type == DBType.SQLITE:
         return "sqlite:///example.db"
     elif db_type == DBType.NEON:
-        # Get the Neon database URL from environment variable
+        # Get the Neon database URL from secrets/environment variables
         neon_url = os.getenv("DATABASE_URL")
-        if not neon_url:
-            raise ValueError("DATABASE_URL environment variable not set for Neon database")
-        return neon_url
+        if neon_url:
+            # If DATABASE_URL is set, use it directly
+            return neon_url
+        
+        # Otherwise, construct URL from individual secrets
+        host_file = os.getenv("NEON_HOST_FILE", "secrets/neon_host.txt")
+        username_file = os.getenv("NEON_USERNAME_FILE", "secrets/neon_username.txt")
+        password_file = os.getenv("NEON_PASSWORD_FILE", "secrets/neon_password.txt")
+        
+        if host_file and username_file and password_file:
+            try:
+                with open(host_file, 'r') as f:
+                    host = f.read().strip()
+                with open(username_file, 'r') as f:
+                    username = f.read().strip()
+                with open(password_file, 'r') as f:
+                    password = f.read().strip()
+                
+                # Construct PostgreSQL URL
+                # The host file already contains the full endpoint with database and SSL params
+                neon_url = f"postgresql://{username}:{password}@{host}"
+                return neon_url
+            except FileNotFoundError as e:
+                raise ValueError(f"Could not read Neon secrets file: {e}")
+        
+        raise ValueError("Either DATABASE_URL or all Neon secret files (NEON_HOST_FILE, NEON_USERNAME_FILE, NEON_PASSWORD_FILE) must be set")
     raise ValueError(f"Unsupported database type: {db_type}")
 
 def get_db_builder(db_type: DBType) -> Tuple[Callable[[], Iterator[Session]], Engine]:
@@ -58,5 +81,5 @@ def get_neon_db():
     return get_db_builder(DBType.NEON)
 
 # Configure database - default to SQLite for local development
-DB_TYPE = DBType.SQLITE
+DB_TYPE = DBType.NEON
 get_db, engine = get_db_builder(DB_TYPE)
