@@ -2,14 +2,22 @@ version: '3.8'
 
 services:
   api:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    image: fastapi-app:dev
     ports:
       - "8000:8000"
     volumes:
       - ./src:/app/src
       - ./tests:/app/tests
+      - ./secrets:/run/secrets:ro  # Mount secrets as read-only
     environment:
       - PYTHONPATH=/app
+      - NEON_HOST_FILE=/run/secrets/neon_host.txt
+      - NEON_USERNAME_FILE=/run/secrets/neon_username.txt
+      - NEON_PASSWORD_FILE=/run/secrets/neon_password.txt
     # Override the CMD to use uvicorn with reload for development
     command: uvicorn src.app:app --host 0.0.0.0 --port 8000 --reload
     # Add healthcheck
