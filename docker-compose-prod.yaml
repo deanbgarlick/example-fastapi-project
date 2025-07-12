@@ -5,9 +5,14 @@ services:
     build: .
     ports:
       - "8000:8000"
+    volumes:
+      - ./secrets:/run/secrets:ro  # Mount secrets as read-only
     environment:
       - PYTHONPATH=/app
-    # Production settings - no reload, no volumes
+      - NEON_HOST_FILE=/run/secrets/neon_host.txt
+      - NEON_USERNAME_FILE=/run/secrets/neon_username.txt
+      - NEON_PASSWORD_FILE=/run/secrets/neon_password.txt
+    # Override the CMD to use uvicorn with reload for development
     command: uvicorn src.app:app --host 0.0.0.0 --port 8000 --workers 4
     # Add healthcheck
     healthcheck:
@@ -15,14 +20,4 @@ services:
       interval: 30s
       timeout: 10s
       retries: 3
-      start_period: 10s
-    # Production specific settings
-    restart: unless-stopped
-    deploy:
-      resources:
-        limits:
-          cpus: '1'
-          memory: 1G
-        reservations:
-          cpus: '0.5'
-          memory: 512M 
+      start_period: 10s 
